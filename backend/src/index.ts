@@ -12,10 +12,6 @@ app.use(express.json());
 
 app.use("/v1", router);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World");
-});
-
 app.listen(port, async () => {
   await connectDB();
   console.log(`App is listening at port ${port}`);
