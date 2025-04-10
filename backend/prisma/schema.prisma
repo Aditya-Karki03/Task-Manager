@@ -30,9 +30,23 @@ model Task{
   id Int @id @default(autoincrement())
   tName String
   tDesc String
-  tStatus String
-  tPriorities String
+  tStatus Status @default(todo)
+  tPriorities Priorities @default(medium)
   tCategory String
+  tDueDate DateTime @default(now())
   tAssignedTo User @relation(fields: [tAssignedToId], references: [id])
   tAssignedToId Int
+}
+
+enum Priorities {
+  low
+  high
+  medium 
+  urgent
+}
+enum Status {
+  todo
+  inProgress
+  completed
+  stuck
 }
