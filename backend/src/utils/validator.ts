@@ -48,19 +48,24 @@ export function newTaskValidator(taskInfo: ITaskValidator) {
       })
       .optional(),
 
-    taskDueDate: z.coerce.date({ message: "Please provide task due date" }),
+    taskDueDate: z.coerce
+      .date({ message: "Please provide task due date" })
+      .refine(
+        (date) => {
+          return date >= new Date(Date.now());
+        },
+        {
+          message: "Please input a valid date",
+        }
+      ),
 
     taskPriority: z.enum(["low", "high", "medium", "urgent"]),
 
     taskStatus: z.enum(["todo", "inProgress", "completed", "stuck"]),
 
-    taskAssignedTo: z
-      .string({
-        message: "Please assign the task to someone",
-      })
-      .refine((assignedTo) => assignedTo.length > 0 && assignedTo.length < 50, {
-        message: "Invalid assignee",
-      }),
+    taskAssignedTo: z.number({
+      message: "Invalid assignee",
+    }),
 
     taskCategory: z
       .string()
@@ -102,6 +107,9 @@ export function updateTaskValidator(taskInfo: IUpdateTaskValidator) {
 
     taskDueDate: z.coerce
       .date({ message: "Please provide task due date" })
+      .refine((date) => date >= new Date(Date.now()), {
+        message: "Invalid Due Date",
+      })
       .optional(),
 
     taskPriority: z.enum(["low", "high", "medium", "urgent"]).optional(),
@@ -109,11 +117,8 @@ export function updateTaskValidator(taskInfo: IUpdateTaskValidator) {
     taskStatus: z.enum(["todo", "inProgress", "completed", "stuck"]).optional(),
 
     taskAssignedTo: z
-      .string({
+      .number({
         message: "Please assign the task to someone",
-      })
-      .refine((assignedTo) => assignedTo.length > 0 && assignedTo.length < 50, {
-        message: "Invalid assignee",
       })
       .optional(),
 
